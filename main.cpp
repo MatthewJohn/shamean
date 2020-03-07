@@ -1,36 +1,93 @@
 #include <iostream>
 #include <fstream>
-#include <filesystem>
 
-#include <CkCrypt2.h>
+#include <openssl/sha.h>
 
 // 200KB default size to checksum
 #define BYTE_LENGTH 204800
+#define CHECKSUM_LENGTH 20
 
-void ChecksumFile(char *filename)
+int GetFileSize(const char* filename)
 {
-    // This example assumes the Chilkat API to have been previously unlocked.
-    // See Global Unlock Sample for sample code.
+    std::ifstream in(filename, std::ifstream::ate | std::ifstream::binary);
+    return in.tellg();
+}
 
-    CkCrypt2 crypt;
+typedef union {
+    struct {
+        long filesize;
+        char first[BYTE_LENGTH];
+        char last[BYTE_LENGTH];
+    };
 
-    // Set the name of the hash algorithm.
-    // Other choices include "sha1", "sha256", "sha384", "sha512", "md2", "md5", and "haval". 
-    crypt.put_HashAlgorithm("sha1");
+    unsigned char all_data[];
+} s_file_data;
 
-    // EncodingMode specifies the encoding of the hash output.
-    // It may be "hex", "url", "base64", or "quoted-printable".
-    crypt.put_EncodingMode("hex");
+void ChecksumFile(const char *filename, unsigned char* checksum)
+{
+    // Create struct to hold file info
+    s_file_data file_data;
 
-    //
-    int filesize_bytes = fs::file_size(filename);
+    // Leave room for start of file data, end of file data and file size.
+    // @TODO Should it include timestamp?
+    int buffer_size = sizeof(long) + (BYTE_LENGTH * 2);
+    //unsigned char ibuf[buffer_size];
+
+    // Initialise array
+    for (int i = 0; i < buffer_size; i++)
+       file_data.all_data[i] = 0x00;
+
+    // Open file to read data
+    std::ifstream in_file(filename, std::ifstream::ate | std::ifstream::binary);
+
+
+    // Stop eating new lines in binary mode!!!
+    in_file.unsetf(std::ios::skipws);
+
+    in_file.seekg(0, std::ios::end);
+    file_data.filesize = in_file.tellg();
+    in_file.seekg(0, std::ios::beg);
+    //file_data.filesize = in_file.tellg();
+
+    // Determine if file is big enough to read entire BYTE_LENGTH amount,
+    // else read all available data
+    int first_read_l = (file_data.filesize < BYTE_LENGTH) ? file_data.filesize : BYTE_LENGTH;
+
+    // If there is data in file to read, do it.
+    if (first_read_l > 0)
+    {
+        in_file.read(file_data.first, first_read_l);
+    }
+
+    SHA_CTX ctx;
+    SHA1_Init(&ctx);
+    SHA1_Update(&ctx, file_data.all_data, buffer_size);
+    SHA1_Final(checksum, &ctx);
     return;
-    ifstream file(filename, ios::binary);
 
 }
-int main()
+
+void get_usage()
 {
-    cout << "Hello, World!" << endl;
+    std::cout << "Usage: shamain <Filename>" << std::endl;
+}
+
+int main( int argc, const char* argv[] )
+{
+    if (argc != 2) {
+        get_usage();
+        return 1;
+    }
+
+    unsigned char checksum[CHECKSUM_LENGTH];
+    ChecksumFile(argv[1], checksum);
+    char output[2];
+    for(int j = 0; j < CHECKSUM_LENGTH; j++)
+    {
+        sprintf(output, "%02X", checksum[j]);
+        std::cout << output;
+    }
+    std::cout << std::endl;
     return 0;
 }
 
