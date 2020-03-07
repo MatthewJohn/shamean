@@ -7,12 +7,6 @@
 #define BYTE_LENGTH 204800
 #define CHECKSUM_LENGTH 20
 
-int GetFileSize(const char* filename)
-{
-    std::ifstream in(filename, std::ifstream::ate | std::ifstream::binary);
-    return in.tellg();
-}
-
 typedef union {
     struct {
 
@@ -47,10 +41,10 @@ void ChecksumFile(const char *filename, unsigned char* checksum)
     // Open file to read data
     std::ifstream in_file(filename, std::ifstream::ate | std::ifstream::binary);
 
-
     // Stop eating new lines in binary mode!!!
     in_file.unsetf(std::ios::skipws);
 
+    // Seek to end of file, obtain file length and move back to start.
     in_file.seekg(0, std::ios::end);
     file_data.filesize = in_file.tellg();
     in_file.seekg(0, std::ios::beg);
@@ -65,6 +59,9 @@ void ChecksumFile(const char *filename, unsigned char* checksum)
         in_file.read(file_data.first, first_read_l);
     }
 
+    // Determine amount of data to read from end of file.
+    // If remainig data after read from first half, use either whole BYTE_LENGTH
+    // or remaining data length.
     int end_read_l = ((file_data.filesize - first_read_l) < BYTE_LENGTH) ? (file_data.filesize - first_read_l) : BYTE_LENGTH;
 
     if (end_read_l > 0)
@@ -76,9 +73,15 @@ void ChecksumFile(const char *filename, unsigned char* checksum)
         in_file.read(file_data.last, end_read_l);
     }
 
+
+    // Create SHA object and initialise
     SHA_CTX ctx;
     SHA1_Init(&ctx);
+
+    // Update SHA with all data from file_data struct
     SHA1_Update(&ctx, file_data.all_data, buffer_size);
+
+    // Finalise checksum into checksum byte array
     SHA1_Final(checksum, &ctx);
     return;
 
@@ -96,11 +99,17 @@ int main( int argc, const char* argv[] )
         return 1;
     }
 
+    // Variable to hold output checksum.
     unsigned char checksum[CHECKSUM_LENGTH];
+
+    // Perform checksum
     ChecksumFile(argv[1], checksum);
+
+    // Convert binary checksum into hex
     char output[2];
     for(int j = 0; j < CHECKSUM_LENGTH; j++)
     {
+        // Print each character
         sprintf(output, "%02X", checksum[j]);
         std::cout << output;
     }
