@@ -15,12 +15,19 @@ int GetFileSize(const char* filename)
 
 typedef union {
     struct {
+
+        // Size of file in bytes
         long filesize;
+
+        // Data from start of file
         char first[BYTE_LENGTH];
+
+        // Data from end of file
         char last[BYTE_LENGTH];
     };
 
-    unsigned char all_data[];
+    // Union of all data in file
+    unsigned char all_data[sizeof(long) + (BYTE_LENGTH * 2)];
 } s_file_data;
 
 void ChecksumFile(const char *filename, unsigned char* checksum)
@@ -47,7 +54,6 @@ void ChecksumFile(const char *filename, unsigned char* checksum)
     in_file.seekg(0, std::ios::end);
     file_data.filesize = in_file.tellg();
     in_file.seekg(0, std::ios::beg);
-    //file_data.filesize = in_file.tellg();
 
     // Determine if file is big enough to read entire BYTE_LENGTH amount,
     // else read all available data
@@ -57,6 +63,17 @@ void ChecksumFile(const char *filename, unsigned char* checksum)
     if (first_read_l > 0)
     {
         in_file.read(file_data.first, first_read_l);
+    }
+
+    int end_read_l = ((file_data.filesize - first_read_l) < BYTE_LENGTH) ? (file_data.filesize - first_read_l) : BYTE_LENGTH;
+
+    if (end_read_l > 0)
+    {
+        // Seek to file end minus size of read
+        in_file.seekg(file_data.filesize - end_read_l);
+
+        // Read end of file
+        in_file.read(file_data.last, end_read_l);
     }
 
     SHA_CTX ctx;
