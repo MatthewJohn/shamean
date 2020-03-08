@@ -21,6 +21,7 @@ EOF
         }
 
         stage('Test') {
+            sh 'g++ -g -I./ -c shamean.cpp -o shamean.o  -static'
             sh 'g++ -g -I./ -o testshamean TestShamean.cpp shamean.o -lcppunit -lcrypto'
             sh './testshamean'
         }
