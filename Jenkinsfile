@@ -6,6 +6,14 @@ node {
     sh 'g++ -lcrypto -lssl -g main.cpp -o shamean'
   }
 
+  stage('Analyse') {
+    sh 'sonar-scanner -Dsonar.projectKey=shamean -Dsonar.sources=. -Dsonar.host.url=http://sonarqube.dock.studios -Dsonar.login=106a9e583ada41e6d85dcd8f9a5177498203e4eb'
+  }
+
+  stage('Test') {
+    sh 'echo hi'
+  }
+
   stage('Archive') {
     sh "zip shamean-${env.BUILD_NUMBER}" shamean
     archiveArtifacts artifacts: 'shamean*.zip,shamean', fingerprint: true
