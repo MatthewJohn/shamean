@@ -19,10 +19,15 @@ EOF
         stage('Build') {
             sh 'g++ -g main.cpp shamean.cpp -o shamean -lcrypto -static'
         }
+
+        stage('Test') {
+            sh 'g++ -g -I./ -o testshamean TestShamean.cpp shamean.o -lcppunit -lcrypto'
+            sh './testshamean'
+        }
     }
 
     stage('Analyse') {
-        sh 'sonar-scanner -Dsonar.projectKey=shamean -Dsonar.sources=. -Dsonar.host.url=http://sonarqube.dock.studios -Dsonar.login=106a9e583ada41e6d85dcd8f9a5177498203e4eb'
+        sh 'sonar-scanner -Dsonar.cfamily.cppunit.reportsPath=cppTestShameanResults.xml -Dsonar.projectKey=shamean -Dsonar.sources=. -Dsonar.host.url=http://sonarqube.dock.studios -Dsonar.login=106a9e583ada41e6d85dcd8f9a5177498203e4eb'
     }
 
     stage('Test') {

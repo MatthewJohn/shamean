@@ -12,7 +12,8 @@ int main( int argc, const char* argv[] )
     }
 
     // Variable to hold output checksum.
-    unsigned char checksum[CHECKSUM_LENGTH];
+    unsigned char checksum_bin[CHECKSUM_LENGTH];
+    char checksum_hex[CHECKSUM_LENGTH_HEX];
 
     // Variable to hold if file error occurred
     bool file_err = false;
@@ -28,15 +29,9 @@ int main( int argc, const char* argv[] )
         return 1;
     }
 
-    // Convert binary checksum into hex
-    char output[2];
-    for(int j = 0; j < CHECKSUM_LENGTH; j++)
-    {
-        // Print each character
-        sprintf(output, "%02X", checksum[j]);
-        std::cout << output;
-    }
-    std::cout << std::endl;
+    convert_to_hex(checksum_bin, checksum_hex);
+
+    std::cout << checksum_hex << std::endl;
     return 0;
 }
 

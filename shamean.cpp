@@ -72,6 +72,16 @@ void checksum_file(const char *filename, unsigned char *checksum, bool &file_err
     return;
 }
 
+void convert_to_hex(unsigned char *checksum_bin, char *checksum_hex)
+{
+    // Convert binary checksum into hex
+    for(int j = 0; j < CHECKSUM_LENGTH; j++)
+    {
+        // Print each character
+        sprintf(&checksum_hex[j * 2], "%02X", checksum_bin[j]);
+    }
+}
+
 void get_usage()
 {
     std::cout << "Usage: shamain <Filename>" << std::endl

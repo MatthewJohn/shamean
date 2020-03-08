@@ -14,6 +14,7 @@
 // 200KB default size to checksum
 #define BYTE_LENGTH 204800
 #define CHECKSUM_LENGTH 20
+#define CHECKSUM_LENGTH_HEX 40
 
 typedef union {
     struct {
@@ -33,5 +34,6 @@ typedef union {
 } s_file_data;
 
 void checksum_file(const char *filename, unsigned char *checksum, bool &file_err);
+void convert_to_hex(unsigned char *checksum_bin, char *checksum_hex);
 void get_usage();
 
