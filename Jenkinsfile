@@ -9,8 +9,8 @@ node {
     stage('Create version.h') {
         sh """cat <<EOF > version.hpp
 #define SHAMEAN_VERSION "${env.BUILD_NUMBER}"
-#define SHAMEAN_BUILD_DATE "${env.BUILD_DATE}"
-#define SHAMEAN_GIT_COMMIT "${env.GIT_COMMIT}"
+#define SHAMEAN_BUILD_DATE "`date`"
+#define SHAMEAN_GIT_COMMIT "`git rev-parse HEAD`"
 EOF
 """
     }
