@@ -130,8 +130,8 @@ int main( int argc, const char* argv[] )
     if (file_err)
     {
         std::cout << "shamean: cannot access '" << argv[1]
-		  << "': No such file or directory" << std::endl;
-	return 1;
+                  << "': No such file or directory" << std::endl;
+        return 1;
     }
 
     // Convert binary checksum into hex
