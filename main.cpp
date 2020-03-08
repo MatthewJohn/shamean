@@ -4,6 +4,8 @@
 
 #include <openssl/sha.h>
 
+#include "version.h"
+
 // 200KB default size to checksum
 #define BYTE_LENGTH 204800
 #define CHECKSUM_LENGTH 20
@@ -91,7 +93,11 @@ void get_usage()
     std::cout << "Usage: shamain <Filename>" << std::endl
               << std::endl
               << "Generate a SHA-1 SUM of a file,"
-              << " reading as little data from the file as possible" << std::endl;
+              << " reading as little data from the file as possible" << std::endl
+              << std::endl
+              << "Version: " << SHAMEAN_VERSION
+              << ", GitCommit: " << SHAMEAN_GIT_COMMIT
+              << "BuildDate: " << SHAMEAN_BUILD_DATE << std::endl;
 }
 
 int main( int argc, const char* argv[] )

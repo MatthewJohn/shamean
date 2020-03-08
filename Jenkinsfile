@@ -5,6 +5,16 @@ node {
     stage('PullImage') {
         sh 'docker pull fare-docker-reg.dock.studios:5000/quay.io/eclipse/che-cpp-rhel7:nightly-20200308'
     }
+
+    stage('Create version.h') {
+        sh """cat <<EOF > version.h
+#define SHAMEAN_VERSION "${env.BUILD_NUMBER}"
+#define SHAMEAN_BUILD_DATE "${env.BUILD_DATE}"
+#define SHAMEAN_GIT_COMMIT "${env.GIT_COMMIT}"
+EOF
+"""
+    }
+
     docker.image('fare-docker-reg.dock.studios:5000/quay.io/eclipse/che-cpp-rhel7:nightly-20200308').inside {
         stage('Build') {
             sh 'g++ -lcrypto -lssl -g main.cpp -o shamean'
