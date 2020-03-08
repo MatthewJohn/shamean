@@ -34,6 +34,6 @@ EOF
         archiveArtifacts artifacts: 'shamean*.zip,shamean', fingerprint: true
     }
     stage('CleanUP') {
-        cleanWs(patterns: [[pattern: 'shamean', type: 'INCLUDE']])
+        cleanWs()
     }
 }
