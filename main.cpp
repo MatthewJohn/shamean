@@ -48,7 +48,7 @@ void checksum_file(const char *filename, unsigned char *checksum, bool &file_err
     // Open file to read data
     std::ifstream in_file(filename, std::ifstream::ate | std::ifstream::binary);
 
-    if (in_file.is_open())
+    if (! in_file.is_open())
     {
       file_err = true;
       return;
