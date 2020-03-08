@@ -4,7 +4,7 @@
 
 #include <openssl/sha.h>
 
-#include "version.h"
+#include "version.hpp"
 
 // 200KB default size to checksum
 #define BYTE_LENGTH 204800
