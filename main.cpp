@@ -32,7 +32,7 @@ typedef union {
     unsigned char all_data[sizeof(long) + (BYTE_LENGTH * 2)];
 } s_file_data;
 
-void checksum_file(const char *filename, unsigned char* checksum)
+void checksum_file(const char *filename, unsigned char *checksum, bool &file_err)
 {
     // Create struct to hold file info
     s_file_data file_data;
@@ -47,6 +47,12 @@ void checksum_file(const char *filename, unsigned char* checksum)
 
     // Open file to read data
     std::ifstream in_file(filename, std::ifstream::ate | std::ifstream::binary);
+
+    if (in_file.is_open())
+    {
+      file_err = true;
+      return;
+    }
 
     // Stop eating new lines in binary mode!!!
     in_file.unsetf(std::ios::skipws);
@@ -114,11 +120,22 @@ int main( int argc, const char* argv[] )
     // Variable to hold output checksum.
     unsigned char checksum[CHECKSUM_LENGTH];
 
+    // Variable to hold if file error occurred
+    bool file_err = false;
+
     // Perform checksum
-    checksum_file(argv[1], checksum);
+    checksum_file(argv[1], checksum, file_err);
+
+    // Check if error occurred
+    if (file_err)
+    {
+        std::cout << "shamean: cannot access '" << argv[1]
+		  << "': No such file or directory" << std::endl;
+	return 1;
+    }
 
     // Convert binary checksum into hex
-    char output[2];
+    char output[2];i
     for(int j = 0; j < CHECKSUM_LENGTH; j++)
     {
         // Print each character
