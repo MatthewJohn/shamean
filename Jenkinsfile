@@ -17,7 +17,7 @@ EOF
 
     docker.image('fare-docker-reg.dock.studios:5000/quay.io/eclipse/che-cpp-rhel7:nightly-20200308').inside {
         stage('Build') {
-            sh 'g++ -lcrypto -lssl -g main.cpp -o shamean'
+            sh 'g++ -l:crypto -l:ssl -g main.cpp -o shamean'
         }
     }
 
