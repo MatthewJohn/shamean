@@ -97,7 +97,7 @@ void get_usage()
               << std::endl
               << "Version: " << SHAMEAN_VERSION
               << ", GitCommit: " << SHAMEAN_GIT_COMMIT
-              << "BuildDate: " << SHAMEAN_BUILD_DATE << std::endl;
+              << ", BuildDate: " << SHAMEAN_BUILD_DATE << std::endl;
 }
 
 int main( int argc, const char* argv[] )
