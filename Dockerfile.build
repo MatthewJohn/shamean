@@ -27,4 +27,5 @@ RUN apt-get update && apt-get install -y \
   libjemalloc-dev \
   libssl-dev \
   libiberty-dev \
-  libcrypto++-dev
+  libcrypto++-dev \
+  libcppunit-dev
