@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <cstring>
 
 #include <openssl/sha.h>
 
@@ -32,7 +33,6 @@ void ChecksumFile(const char *filename, unsigned char* checksum)
     // Leave room for start of file data, end of file data and file size.
     // @TODO Should it include timestamp?
     int buffer_size = sizeof(long) + (BYTE_LENGTH * 2);
-    //unsigned char ibuf[buffer_size];
 
     // Initialise array
     for (int i = 0; i < buffer_size; i++)
@@ -84,17 +84,19 @@ void ChecksumFile(const char *filename, unsigned char* checksum)
     // Finalise checksum into checksum byte array
     SHA1_Final(checksum, &ctx);
     return;
-
 }
 
 void get_usage()
 {
-    std::cout << "Usage: shamain <Filename>" << std::endl;
+    std::cout << "Usage: shamain <Filename>" << std::endl
+              << std::endl
+              << "Generate a SHA-1 SUM of a file,"
+              << " reading as little data from the file as possible" << std::endl;
 }
 
 int main( int argc, const char* argv[] )
 {
-    if (argc != 2) {
+    if (argc != 2 or strcmp(argv[1], "--help") == 0) {
         get_usage();
         return 1;
     }
