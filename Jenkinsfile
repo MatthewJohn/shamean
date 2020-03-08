@@ -7,7 +7,7 @@ node {
     }
 
     stage('Create version.h') {
-        sh """cat <<EOF > version.h
+        sh """cat <<EOF > version.hpp
 #define SHAMEAN_VERSION "${env.BUILD_NUMBER}"
 #define SHAMEAN_BUILD_DATE "${env.BUILD_DATE}"
 #define SHAMEAN_GIT_COMMIT "${env.GIT_COMMIT}"
