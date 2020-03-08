@@ -1,7 +1,9 @@
 pipeline {
     stages {
         stage('Checkout') {
-            git 'ssh://vcs-user@phabricator.dockstudios.co.uk/diffusion/SHAMEAN/shamean.git'
+            steps {
+                git 'ssh://vcs-user@phabricator.dockstudios.co.uk/diffusion/SHAMEAN/shamean.git'
+            }
         }
         stage('Build') {
             agent {
@@ -13,19 +15,27 @@ pipeline {
         }
 
         stage('Analyse') {
-            sh 'sonar-scanner -Dsonar.projectKey=shamean -Dsonar.sources=. -Dsonar.host.url=http://sonarqube.dock.studios -Dsonar.login=106a9e583ada41e6d85dcd8f9a5177498203e4eb'
+            steps {
+                sh 'sonar-scanner -Dsonar.projectKey=shamean -Dsonar.sources=. -Dsonar.host.url=http://sonarqube.dock.studios -Dsonar.login=106a9e583ada41e6d85dcd8f9a5177498203e4eb'
+            }
         }
 
         stage('Test') {
-            sh 'echo hi'
+            steps {
+                sh 'echo hi'
+            }
         }
 
         stage('Archive') {
-            sh "zip shamean-${env.BUILD_NUMBER}" shamean
-            archiveArtifacts artifacts: 'shamean*.zip,shamean', fingerprint: true
+            steps {
+                sh "zip shamean-${env.BUILD_NUMBER}" shamean
+                archiveArtifacts artifacts: 'shamean*.zip,shamean', fingerprint: true
+            }
         }
         stage('CleanUP') {
-            cleanWs(patterns: [[pattern: 'shamean', type: 'INCLUDE']])
+            steps {
+                cleanWs(patterns: [[pattern: 'shamean', type: 'INCLUDE']])
+            }
         }
     }
 }
