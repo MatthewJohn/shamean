@@ -20,7 +20,7 @@ node {
     }
 
     stage('Archive') {
-        sh "zip shamean-${env.BUILD_NUMBER}" shamean
+        sh "zip shamean-${env.BUILD_NUMBER}.zip shamean"
         archiveArtifacts artifacts: 'shamean*.zip,shamean', fingerprint: true
     }
     stage('CleanUP') {
