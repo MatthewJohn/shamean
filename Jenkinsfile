@@ -3,7 +3,7 @@ node {
         git 'ssh://vcs-user@phabricator.dockstudios.co.uk/diffusion/SHAMEAN/shamean.git'
     }
     stage('PullImage') {
-        sh 'docker pull fare-docker-reg.dock.studios:5000/quay.io/eclipse/che-cpp-rhel7:nightly-20200308'
+        sh 'docker build . -t shamean-build -f Dockerfile.build --build-arg=http_proxy=http://fare-proxy.dock.studios:3142 --build-arg=https_proxy=http://fare-proxy.dock.studios:3142'
     }
 
     stage('Create version.h') {
@@ -15,9 +15,9 @@ EOF
 """
     }
 
-    docker.image('fare-docker-reg.dock.studios:5000/quay.io/eclipse/che-cpp-rhel7:nightly-20200308').inside {
+    docker.image('shamean-build').inside {
         stage('Build') {
-            sh 'g++ -Bstatic -L/usr/lib64 -lcrypto -lssl -g main.cpp -o shamean'
+            sh 'g++ -g main.cpp -o shamean -lcrypto -static'
         }
     }
 
