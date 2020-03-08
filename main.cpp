@@ -32,7 +32,7 @@ typedef union {
     unsigned char all_data[sizeof(long) + (BYTE_LENGTH * 2)];
 } s_file_data;
 
-void ChecksumFile(const char *filename, unsigned char* checksum)
+void checksum_file(const char *filename, unsigned char* checksum)
 {
     // Create struct to hold file info
     s_file_data file_data;
@@ -115,7 +115,7 @@ int main( int argc, const char* argv[] )
     unsigned char checksum[CHECKSUM_LENGTH];
 
     // Perform checksum
-    ChecksumFile(argv[1], checksum);
+    checksum_file(argv[1], checksum);
 
     // Convert binary checksum into hex
     char output[2];
