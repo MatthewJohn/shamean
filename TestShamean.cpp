@@ -55,7 +55,6 @@ TestShamean::testChecksumFile(void)
     checksum_file(test_filename, checksum, opened_ok);
     convert_to_hex(checksum, out_checksum);
 
-    std::cout << out_checksum;
     CPPUNIT_ASSERT(strcmp(out_checksum, "D35CD2A09CB225209679C56B42C60D9440A3B8BB") == 0);
     std::remove(test_filename);
 }
