@@ -1,5 +1,4 @@
 pipeline {
-    agent none
     stage('Checkout') {
         git 'ssh://vcs-user@phabricator.dockstudios.co.uk/diffusion/SHAMEAN/shamean.git'
     }
