@@ -28,4 +28,5 @@ RUN apt-get update && apt-get install -y \
   libssl-dev \
   libiberty-dev \
   libcrypto++-dev \
-  libcppunit-dev
+  libcppunit-dev \
+  gcovr

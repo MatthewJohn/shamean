@@ -21,9 +21,10 @@ EOF
         }
 
         stage('Test') {
-            sh 'g++ -g -I./ -c shamean.cpp -o shamean.o  -static'
-            sh 'g++ -g -I./ -o testshamean TestShamean.cpp shamean.o -lcppunit -lcrypto'
+            sh 'g++ -fprofile-arcs -ftest-coverage -fPIC -O0 -g -I./ -c shamean.cpp -o shamean.o  -static'
+            sh 'g++ -fprofile-arcs -ftest-coverage -fPIC -O0 -g -I./ -o testshamean TestShamean.cpp shamean.o -lcppunit -lcrypto'
             sh './testshamean'
+            sh 'gcovr --xml -r . > coverage.xml'
         }
     }
 
