@@ -2,6 +2,9 @@ node {
     stage('Checkout') {
         git 'ssh://vcs-user@phabricator.dockstudios.co.uk/diffusion/SHAMEAN/shamean.git'
     }
+    stage('PullImage') {
+        sh 'docker pull fare-docker-reg.dock.studios:5000/quay.io/eclipse/che-cpp-rhel7:nightly-20200308'
+    }
     docker.image('fare-docker-reg.dock.studios:5000/quay.io/eclipse/che-cpp-rhel7:nightly-20200308').inside {
         stage('Build') {
             sh 'g++ -lcrypto -lssl -g main.cpp -o shamean'
