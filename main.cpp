@@ -92,8 +92,7 @@ void get_usage()
 {
     std::cout << "Usage: shamain <Filename>" << std::endl
               << std::endl
-              << "Generate a SHA-1 SUM of a file,"
-              << " reading as little data from the file as possible" << std::endl
+              << "Generate a SHA-1 SUM, based on length and subset of data from a file."
               << std::endl
               << "Version: " << SHAMEAN_VERSION
               << ", GitCommit: " << SHAMEAN_GIT_COMMIT
