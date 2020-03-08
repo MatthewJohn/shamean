@@ -17,7 +17,7 @@ EOF
 
     docker.image('shamean-build').inside {
         stage('Build') {
-            sh 'g++ -g shamean.cpp -o shamean -lcrypto -static'
+            sh 'g++ -g main.cpp shamean.cpp -o shamean -lcrypto -static'
         }
     }
 

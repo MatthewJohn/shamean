@@ -33,8 +33,5 @@ typedef union {
 } s_file_data;
 
 void checksum_file(const char *filename, unsigned char *checksum, bool &file_err);
-
 void get_usage();
-
-int main( int argc, const char* argv[] );
 
