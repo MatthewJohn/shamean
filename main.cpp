@@ -135,7 +135,7 @@ int main( int argc, const char* argv[] )
     }
 
     // Convert binary checksum into hex
-    char output[2];i
+    char output[2];
     for(int j = 0; j < CHECKSUM_LENGTH; j++)
     {
         // Print each character
