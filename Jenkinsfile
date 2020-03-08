@@ -29,7 +29,7 @@ pipeline {
 
         stage('Archive') {
             steps {
-                sh "zip shamean-${env.BUILD_NUMBER}" shamean
+                sh "zip shamean-${env.BUILD_NUMBER} shamean"
                 archiveArtifacts artifacts: 'shamean*.zip,shamean', fingerprint: true
             }
         }
