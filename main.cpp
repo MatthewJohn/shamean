@@ -19,7 +19,7 @@ int main( int argc, const char* argv[] )
     bool file_err = false;
 
     // Perform checksum
-    checksum_file(argv[1], checksum, file_err);
+    checksum_file(argv[1], checksum_bin, file_err);
 
     // Check if error occurred
     if (file_err)
