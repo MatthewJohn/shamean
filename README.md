@@ -14,5 +14,7 @@
 ## Uses in pop-culture
 
 Cindy Campbell (Scary Movie): `Yo, that jacket is tight, son. shamean`
-Sean Kingston (Replay): Shamean like a melody in my head 
+Sean Kingston (Replay): `Shamean like a melody in my head`
+
+Pretty sure Gandalf said something about it
 
