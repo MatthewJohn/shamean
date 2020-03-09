@@ -75,12 +75,12 @@ TestShamean::testChecksumFile(void)
 
 
     // Boundary test second boundary
-    /*s_test_data test_data = {"D35CD2A09CB225209679C56B42C60D9440A3B8BB", 'a', 409599};
-    TestShamean::testChecksum(test_data);
-    s_test_data test_data = {"D35CD2A09CB225209679C56B42C60D9440A3B8BB", 'a', 409600};
-    TestShamean::testChecksum(test_data);
-    s_test_data test_data = {"D35CD2A09CB225209679C56B42C60D9440A3B8BB", 'a', 409601};
-    TestShamean::testChecksum(test_data);*/
+    s_test_data test_data_sb0 = {"4164F110D6B5399E67DB9063054D388D504CCA4D", 'a', 409599};
+    TestShamean::testChecksum(test_data_sb0);
+    s_test_data test_data_sb1 = {"18B3E22788571B66F97D0E12309E62D57201E2C7", 'a', 409600};
+    TestShamean::testChecksum(test_data_sb1);
+    s_test_data test_data_sb2 = {"16DD903090ED8BE4E257E5F9BC0F54D88CC02ED8", 'a', 409601};
+    TestShamean::testChecksum(test_data_sb2);
 
 }
 
@@ -108,7 +108,7 @@ TestShamean::testChecksum(s_test_data &test_data)
 
     checksum_file(test_filename, checksum, open_err);
     convert_to_hex(checksum, out_checksum);
-    std::cout << out_checksum << std::endl;
+
     CPPUNIT_ASSERT(strcmp(out_checksum, test_data.expected_checksum) == 0);
     CPPUNIT_ASSERT(open_err == false);
     std::remove(test_filename);
