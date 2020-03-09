@@ -54,7 +54,7 @@ TestShamean::testChecksumFile(void)
     // Test zero size file and boundary test
     s_test_data test_data_z1 = {"7156ECD78C70FC3349EBB604C9B934018EB1CBB2", 'a', 0};
     TestShamean::testChecksum(test_data_z1);
-    /*s_test_data test_data_z2 = {"5F521D87B6D36D1EA5AC3F7CAC210AD82BCE5EDF", 'a', 1};
+    s_test_data test_data_z2 = {"4FB276174E7C6357851669D70C66975ED4F32E30", 'a', 1};
     TestShamean::testChecksum(test_data_z2);
  
 
@@ -63,7 +63,7 @@ TestShamean::testChecksumFile(void)
     TestShamean::testChecksum(test_data_sf1);
 
     // Boundary test first boundary 
-    s_test_data test_data_fb0 = {"D35CD2A09CB225209679C56B42C60D9440A3B8BB", 'a', 204799};
+    /*s_test_data test_data_fb0 = {"D35CD2A09CB225209679C56B42C60D9440A3B8BB", 'a', 204799};
     TestShamean::testChecksum(test_data_fb0);
     s_test_data test_data_fb1 = {"D35CD2A09CB225209679C56B42C60D9440A3B8BB", 'a', 204800};
     TestShamean::testChecksum(test_data_fb1);
@@ -88,7 +88,6 @@ TestShamean::testChecksum(s_test_data test_data)
     std::cout << test_data.length;
     for (long i = 0; i < test_data.length; i++)
     {
-        std::cout << "adding character";
         in_data[i] = test_data.character;
     }
 
