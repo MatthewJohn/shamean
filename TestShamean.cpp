@@ -1,6 +1,9 @@
 #include <iostream>
 #include <string>
 #include <list>
+#include <unistd.h>
+
+
 #include <cppunit/TestCase.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/ui/text/TextTestRunner.h>
@@ -85,7 +88,6 @@ void
 TestShamean::testChecksum(s_test_data &test_data)
 {
     char in_data[test_data.length];
-    std::cout  <<"length: "<< test_data.length<<std::endl;
     for (long i = 0; i < test_data.length; i++)
     {
         in_data[i] = test_data.character;
@@ -93,9 +95,10 @@ TestShamean::testChecksum(s_test_data &test_data)
 
     // Create test file
     char test_filename[] = "test_file";
-    std::ofstream test_file(test_filename, std::ofstream::trunc);
+    std::ofstream test_file(test_filename, std::ofstream::binary | std::ofstream::trunc);
     test_file << in_data;
     test_file.close();
+    sync();
 
     // Create variables to pass to checksum_file
     unsigned char checksum[20];
@@ -107,7 +110,7 @@ TestShamean::testChecksum(s_test_data &test_data)
     std::cout << out_checksum << std::endl;
     CPPUNIT_ASSERT(strcmp(out_checksum, test_data.expected_checksum) == 0);
     CPPUNIT_ASSERT(open_err == false);
-    //std::remove(test_filename);
+    std::remove(test_filename);
 }
 
 void
