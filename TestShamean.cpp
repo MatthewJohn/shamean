@@ -87,7 +87,7 @@ TestShamean::testChecksumFile(void)
 void
 TestShamean::testChecksum(s_test_data &test_data)
 {
-    char in_data[test_data.length];
+    char in_data[test_data.length + 1];
     for (long i = 0; i < test_data.length; i++)
     {
         in_data[i] = test_data.character;
