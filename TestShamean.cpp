@@ -68,9 +68,9 @@ TestShamean::testChecksumFile(void)
     // Boundary test first boundary 
     s_test_data test_data_fb0 = {"79CBA16DF55089FB8B132A7D407DD85A9EC20835", 'a', 204799};
     TestShamean::testChecksum(test_data_fb0);
-    s_test_data test_data_fb1 = {"6630BBAA932DE66E089F08300896DE561A07DDC7", 'a', 204800};
+    s_test_data test_data_fb1 = {"BB7F02D1FB88F7DA7A3967370DECB72539C5A220", 'a', 204800};
     TestShamean::testChecksum(test_data_fb1);
-    s_test_data test_data_fb2 = {"110EC5A8F67F3FE7C1A6AF1B71EE688CAB206D89", 'a', 204801};
+    s_test_data test_data_fb2 = {"7FEEBBE67D6425DE4759CB0E200238DAE753946A", 'a', 204801};
     TestShamean::testChecksum(test_data_fb2);
 
 
@@ -92,6 +92,7 @@ TestShamean::testChecksum(s_test_data &test_data)
     {
         in_data[i] = test_data.character;
     }
+    in_data[test_data.length] = '\0';
 
     // Create test file
     char test_filename[] = "test_file";
