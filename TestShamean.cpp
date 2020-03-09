@@ -43,7 +43,7 @@ protected:
     void testChecksumFile(void);
     void testChecksumNonExistFile(void);
 private:
-    void testChecksum(s_test_data test_data);
+    void testChecksum(s_test_data *test_data);
 };
 
 
@@ -53,14 +53,14 @@ TestShamean::testChecksumFile(void)
 {
     // Test zero size file and boundary test
     s_test_data test_data_z1 = {"7156ECD78C70FC3349EBB604C9B934018EB1CBB2", 'a', 0};
-    TestShamean::testChecksum(test_data_z1);
+    TestShamean::testChecksum(&test_data_z1);
     s_test_data test_data_z2 = {"4FB276174E7C6357851669D70C66975ED4F32E30", 'a', 1};
-    TestShamean::testChecksum(test_data_z2);
+    TestShamean::testChecksum(&test_data_z2);
  
 
     // Test small file
     s_test_data test_data_sf1 = {"D35CD2A09CB225209679C56B42C60D9440A3B8BB", 'a', 8};
-    TestShamean::testChecksum(test_data_sf1);
+    TestShamean::testChecksum(&test_data_sf1);
 
     // Boundary test first boundary 
     /*s_test_data test_data_fb0 = {"D35CD2A09CB225209679C56B42C60D9440A3B8BB", 'a', 204799};
@@ -82,13 +82,13 @@ TestShamean::testChecksumFile(void)
 }
 
 void
-TestShamean::testChecksum(s_test_data test_data)
+TestShamean::testChecksum(s_test_data *test_data)
 {
-    char in_data[test_data.length];
-    std::cout << test_data.length;
-    for (long i = 0; i < test_data.length; i++)
+    char in_data[test_data->length];
+    std::cout << test_data->length;
+    for (long i = 0; i < test_data->length; i++)
     {
-        in_data[i] = test_data.character;
+        in_data[i] = test_data->character;
     }
 
     // Create test file
@@ -105,7 +105,7 @@ TestShamean::testChecksum(s_test_data test_data)
     checksum_file(test_filename, checksum, open_err);
     convert_to_hex(checksum, out_checksum);
     std::cout << out_checksum << std::endl;
-    CPPUNIT_ASSERT(strcmp(out_checksum, test_data.expected_checksum) == 0);
+    CPPUNIT_ASSERT(strcmp(out_checksum, test_data->expected_checksum) == 0);
     CPPUNIT_ASSERT(open_err == false);
     std::remove(test_filename);
 }
