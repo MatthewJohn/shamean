@@ -8,7 +8,7 @@
 void checksum_file(const char *filename, unsigned char *checksum, bool &file_err)
 {
     // Create struct to hold file info
-    s_file_data file_data;
+    SFileData file_data;
 
     // Leave room for start of file data, end of file data and file size.
     // @TODO Should it include timestamp?
