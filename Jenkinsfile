@@ -29,7 +29,7 @@ EOF
     }
 
     stage('Analyse') {
-        sh 'sonar-scanner -Dsonar.cfamily.cppunit.reportsPath=cppTestShameanResults.xml -Dsonar.projectKey=shamean -Dsonar.sources=. -Dsonar.host.url=http://sonarqube.dock.studios -Dsonar.login=106a9e583ada41e6d85dcd8f9a5177498203e4eb -Dsonar.cxx.includeDirectories=/usr/include,/usr/local/include -Dsonar.cfamily.gcov.reportsPath=.'
+        sh 'sonar-scanner -Dsonar.cfamily.cppunit.reportsPath=cppTestShameanResults.xml -Dsonar.projectKey=shamean -Dsonar.sources=. -Dsonar.host.url=http://sonarqube.dock.studios -Dsonar.login=106a9e583ada41e6d85dcd8f9a5177498203e4eb -Dsonar.cxx.includeDirectories=/usr/include,/usr/local/include,/usr/include/c++/5 -Dsonar.cfamily.gcov.reportsPath=.'
     }
 
     stage('Test') {
