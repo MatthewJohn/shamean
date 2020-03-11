@@ -32,10 +32,6 @@ EOF
         sh 'sonar-scanner -Dsonar.cfamily.cppunit.reportsPath=cppTestShameanResults.xml -Dsonar.projectKey=shamean -Dsonar.sources=. -Dsonar.host.url=http://sonarqube.dock.studios -Dsonar.login=106a9e583ada41e6d85dcd8f9a5177498203e4eb -Dsonar.cxx.includeDirectories=/usr/include,/usr/local/include,/usr/include/c++/5 -Dsonar.cfamily.gcov.reportsPath=. -Dsonar.cxx.coverage.reportPath=./*.xml'
     }
 
-    stage('Test') {
-        sh 'echo hi'
-    }
-
     stage('Archive') {
         sh "zip shamean-${env.BUILD_NUMBER}.zip shamean"
         archiveArtifacts artifacts: 'shamean*.zip,shamean', fingerprint: true
