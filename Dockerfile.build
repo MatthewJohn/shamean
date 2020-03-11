@@ -30,3 +30,6 @@ RUN apt-get update && apt-get install -y \
   libcrypto++-dev \
   libcppunit-dev \
   gcovr
+
+WORKDIR /code
+

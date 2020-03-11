@@ -9,7 +9,7 @@
 ## Build
 
     ./scripts/build_container.sh
-    docker run -v `pwd`:/code shamean-build bash -c "cd /code; g++ -g main.cpp -o shamean -lcrypto -static"
+    docker run -v `pwd`:/code shamean-build ./scripts/build.sh
 
 ## What is this
 
@@ -63,6 +63,6 @@ Required packages:
 Build for tests:
 
     ./scripts/build_container.sh
-    docker run -v `pwd`:/code shamean-build bash -c 'cd /code; ./scripts/run_tests.sh'
+    docker run -v `pwd`:/code shamean-build ./scripts/run_tests.sh
 
 
