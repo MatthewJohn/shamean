@@ -45,3 +45,24 @@ Sean Kingston (Replay): `Shamean like a melody in my head`
 
 Pretty sure Gandalf said something about it
 
+
+## Developmnet
+
+NOTE: This repo is a replica of DS phabricator. Do not commit to any mirror.
+
+Use the supplied Jenkinsfile to run CI.
+
+Required packages::
+
+    libssl-dev
+    libiberty-dev
+    libcrypto++-dev
+    libcppunit-dev
+
+
+Build for tests::
+
+    ./scripts/build_container.sh
+    docker run -v `pwd`:/code shamean-build bash -c 'cd /code; ./scripts/run_tests.sh'
+
+
