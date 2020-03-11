@@ -52,15 +52,15 @@ NOTE: This repo is a replica of DS phabricator. Do not commit to any mirror.
 
 Use the supplied Jenkinsfile to run CI.
 
-Required packages::
+Required packages:
 
+    g++
     libssl-dev
-    libiberty-dev
     libcrypto++-dev
     libcppunit-dev
 
 
-Build for tests::
+Build for tests:
 
     ./scripts/build_container.sh
     docker run -v `pwd`:/code shamean-build bash -c 'cd /code; ./scripts/run_tests.sh'
