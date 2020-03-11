@@ -1,3 +1,8 @@
+/*
+ * shamean
+ * Copyright (C) 2020 Matt Comben matthew@dockstudios.co.uk
+ */
+
 #include <iostream>
 #include <string>
 #include <list>
