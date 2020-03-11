@@ -3,7 +3,7 @@ node {
         git 'ssh://vcs-user@phabricator.dockstudios.co.uk/diffusion/SHAMEAN/shamean.git'
     }
     stage('PullImage') {
-        sh 'docker build . -t shamean-build -f Dockerfile.build --build-arg=http_proxy=http://fare-proxy.dock.studios:3142 --build-arg=https_proxy=http://fare-proxy.dock.studios:3142'
+        sh './scripts/build_container.sh --build-arg=http_proxy=http://fare-proxy.dock.studios:3142 --build-arg=https_proxy=http://fare-proxy.dock.studios:3142'
     }
 
     stage('Create version.h') {
@@ -17,14 +17,11 @@ EOF
 
     docker.image('shamean-build').inside {
         stage('Build') {
-            sh 'g++ -g main.cpp shamean.cpp -o shamean -lcrypto -static'
+            sh './scripts/build.sh'
         }
 
         stage('Test') {
-            sh 'g++ -fprofile-arcs -ftest-coverage -fPIC -O0 -g -I./ -c shamean.cpp -o shamean.o  -static'
-            sh 'g++ -fprofile-arcs -ftest-coverage -fPIC -O0 -g -I./ -o testshamean TestShamean.cpp shamean.o -lcppunit -lcrypto'
-            sh './testshamean'
-            sh 'gcovr --xml -r . > coverage.xml'
+            sh './scripts/run_tests.sh'
         }
     }
 
