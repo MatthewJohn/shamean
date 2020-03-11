@@ -59,7 +59,6 @@ void checksum_file(const char *filename, unsigned char *checksum, bool &file_err
         in_file.read(file_data.last, end_read_l);
     }
 
-
     // Create SHA object and initialise
     SHA_CTX ctx;
     SHA1_Init(&ctx);
