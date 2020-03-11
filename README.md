@@ -8,7 +8,7 @@
 
 ## Build
 
-    docker build . -t shamean-build -f Dockerfile.build
+    ./scripts/build_container.sh
     docker run -v `pwd`:/code shamean-build bash -c "cd /code; g++ -g main.cpp -o shamean -lcrypto -static"
 
 ## What is this
