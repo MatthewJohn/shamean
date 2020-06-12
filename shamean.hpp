@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
+#include <unistd.h>
 
 #include <openssl/sha.h>
 
@@ -29,6 +30,14 @@ typedef union {
     unsigned char all_data[sizeof(long) + (BYTE_LENGTH * 2)]; ///< Union of all data for checksum
 } SFileData;
 
+// Structure to hold command line arguments
+typedef struct {
+
+    bool show_usage = false;  ///< Whether to show usage and quit
+
+    char filename[];  ///< Filename/path
+
+} s_options;
 
 /**
  * Read file and perform checksum.
@@ -52,3 +61,7 @@ void convert_to_hex(unsigned char *checksum_bin, char *checksum_hex);
  */
 void get_usage();
 
+/**
+ * Obtain command line options and build options object
+ */
+bool get_options(int argc, char* argv[], s_options* options);

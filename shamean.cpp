@@ -83,7 +83,7 @@ void convert_to_hex(unsigned char *checksum_bin, char *checksum_hex)
 
 void get_usage()
 {
-    std::cout << "Usage: shamain <Filename>" << std::endl
+    std::cout << "Usage: shamain [-h] <Filename>" << std::endl
               << std::endl
               << "Generate a SHA-1 SUM, based on length and subset of data from a file."
               << std::endl
@@ -93,3 +93,32 @@ void get_usage()
 }
 
 
+bool get_options(int argc, char* argv[], s_options* options)
+{
+    int option;
+
+    while ((option = getopt(argc, argv, "th")) != -1) {
+        switch(option) {
+            case 'h':
+                options->show_usage = true;
+                break;
+            case '?': //used for some unknown options
+                printf("unknown option: %c\n", optopt);
+                return true;
+        }
+    }
+
+    // Return error if there is not one remaining argument (file path)
+    if (argc - optind != 1)
+    {
+        return true;
+    }
+
+    // Move filename into filename option
+    for(; optind < argc; optind++) {
+        strcpy(options->filename, argv[optind]);
+    }
+
+    // Return everything's okay
+    return false;
+}
