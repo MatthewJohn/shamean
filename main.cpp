@@ -27,7 +27,7 @@ int main( int argc, char* argv[] )
     bool file_err = false;
 
     // Perform checksum
-    checksum_file(options.filename, checksum_bin, file_err);
+    checksum_file(&options, checksum_bin, file_err);
 
     // Check if error occurred
     if (file_err)

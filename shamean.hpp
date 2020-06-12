@@ -7,6 +7,8 @@
 #include <fstream>
 #include <cstring>
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 #include <openssl/sha.h>
 
@@ -22,20 +24,26 @@ typedef union {
 
         long filesize; ///< Size of file in bytes
 
+        long last_modified; ///< Last modified date
+
         char first[BYTE_LENGTH]; ///< Data from start of file
 
         char last[BYTE_LENGTH]; ///< Data from end of file
     };
 
-    unsigned char all_data[sizeof(long) + (BYTE_LENGTH * 2)]; ///< Union of all data for checksum
+    unsigned char all_data[(sizeof(long) * 2) + (BYTE_LENGTH * 2)]; ///< Union of all data for checksum
 } SFileData;
 
-// Structure to hold command line arguments
+/**
+ * Structure to hold command line arguments
+ */
 typedef struct {
 
-    bool show_usage = false;  ///< Whether to show usage and quit
+    bool include_timestamp = false; ///< Whether to use timestamps in hash
 
-    char filename[];  ///< Filename/path
+    bool show_usage = false; ///< Whether to show usage and quit
+
+    char filename[]; ///< Filename/path
 
 } s_options;
 
@@ -46,7 +54,17 @@ typedef struct {
  * @param checksum Output buffer for checksum data.
  * @param file_err Set if an error occurred whilst reading file.
  */
-void checksum_file(const char *filename, unsigned char *checksum, bool &file_err);
+void checksum_file(const s_options *options, unsigned char *checksum, bool &file_err);
+
+/*
+ * Obtain checksum of file and add to filedata
+ *
+ * @param options Options object
+ * @param file_data Pointer to file data object
+ *
+ * @returns true if error occured during stat of file
+ */
+bool get_timestamp(const s_options *options, SFileData *file_data);
 
 /**
  * Convert char array of binary data to hex.

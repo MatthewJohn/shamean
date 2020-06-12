@@ -5,21 +5,29 @@
 
 #include "shamean.hpp"
 
-void checksum_file(const char *filename, unsigned char *checksum, bool &file_err)
+void checksum_file(const s_options *options, unsigned char *checksum, bool &file_err)
 {
     // Create struct to hold file info
     SFileData file_data;
 
     // Leave room for start of file data, end of file data and file size.
     // @TODO Should it include timestamp?
-    int buffer_size = sizeof(long) + (BYTE_LENGTH * 2);
+    int buffer_size = sizeof(file_data.all_data);
 
     // Initialise array
     for (int i = 0; i < buffer_size; i++)
        file_data.all_data[i] = 0x00;
 
+    if (options->include_timestamp)
+    {
+        if (!get_timestamp(options, &file_data))
+        {
+            std::cout << "Error whilst getting file stat()" << std::endl;
+        }
+    }
+
     // Open file to read data
-    std::ifstream in_file(filename, std::ifstream::ate | std::ifstream::binary);
+    std::ifstream in_file(options->filename, std::ifstream::ate | std::ifstream::binary);
 
     if (! in_file.is_open())
     {
@@ -71,6 +79,20 @@ void checksum_file(const char *filename, unsigned char *checksum, bool &file_err
     return;
 }
 
+bool get_timestamp(const s_options *options, SFileData *file_data)
+{
+    struct stat result;
+    if (stat(options->filename, &result) == 0)
+    {
+        file_data->last_modified = (long)result.st_mtime;
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 void convert_to_hex(unsigned char *checksum_bin, char *checksum_hex)
 {
     // Convert binary checksum into hex
@@ -83,7 +105,7 @@ void convert_to_hex(unsigned char *checksum_bin, char *checksum_hex)
 
 void get_usage()
 {
-    std::cout << "Usage: shamain [-h] <Filename>" << std::endl
+    std::cout << "Usage: shamain [-t] [-h] <Filename>" << std::endl
               << std::endl
               << "Generate a SHA-1 SUM, based on length and subset of data from a file."
               << std::endl
@@ -101,6 +123,9 @@ bool get_options(int argc, char* argv[], s_options* options)
         switch(option) {
             case 'h':
                 options->show_usage = true;
+                break;
+            case 't':
+                options->include_timestamp = true;
                 break;
             case '?': //used for some unknown options
                 printf("unknown option: %c\n", optopt);
