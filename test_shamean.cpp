@@ -115,7 +115,6 @@ void TestShamean::testChecksum(s_test_data &test_data)
 
     checksum_file(&options, checksum, open_err);
     convert_to_hex(checksum, out_checksum);
-    std::cout << out_checksum << std::endl << test_data.expected_checksum << std::endl;
     CPPUNIT_ASSERT(strcmp(out_checksum, test_data.expected_checksum) == 0);
     CPPUNIT_ASSERT(open_err == false);
     std::remove(options.filename);
