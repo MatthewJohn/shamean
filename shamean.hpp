@@ -18,6 +18,7 @@
 #define BYTE_LENGTH 204800
 #define CHECKSUM_LENGTH 20
 #define CHECKSUM_LENGTH_HEX 40
+#define PATH_MAX 4096
 
 typedef union {
     struct {
@@ -43,7 +44,7 @@ typedef struct {
 
     bool show_usage = false; ///< Whether to show usage and quit
 
-    char filename[]; ///< Filename/path
+    char filename[PATH_MAX]; ///< Filename/path
 
 } s_options;
 

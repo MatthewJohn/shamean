@@ -56,41 +56,39 @@ private:
 
 
 //-----------------------------------------------------------------------------
-void
-TestShamean::testChecksumFile(void)
+void TestShamean::testChecksumFile(void)
 {
     // Test zero size file and boundary test
-    s_test_data test_data_z1 = {"7156ECD78C70FC3349EBB604C9B934018EB1CBB2", 'a', 0};
+    s_test_data test_data_z1 = {"3C97D0B9804A1AA8E22EAEDD8C31B1D06D7A30DF", 'a', 0};
     TestShamean::testChecksum(test_data_z1);
-    s_test_data test_data_z2 = {"4FB276174E7C6357851669D70C66975ED4F32E30", 'a', 1};
+    s_test_data test_data_z2 = {"FC82ACBEB9A0191373318AB6495D7A1FAAC56310", 'a', 1};
     TestShamean::testChecksum(test_data_z2);
  
 
     // Test small file
-    s_test_data test_data_sf1 = {"D35CD2A09CB225209679C56B42C60D9440A3B8BB", 'a', 8};
+    s_test_data test_data_sf1 = {"A50C171BDD4603CCCBA7B56C093C1A3F023944B3", 'a', 8};
     TestShamean::testChecksum(test_data_sf1);
 
     // Boundary test first boundary 
-    s_test_data test_data_fb0 = {"79CBA16DF55089FB8B132A7D407DD85A9EC20835", 'a', 204799};
+    s_test_data test_data_fb0 = {"EE086E808FC9DB1A0409B5AAEDC0536A68551BDE", 'a', 204799};
     TestShamean::testChecksum(test_data_fb0);
-    s_test_data test_data_fb1 = {"BB7F02D1FB88F7DA7A3967370DECB72539C5A220", 'a', 204800};
+    s_test_data test_data_fb1 = {"0A691FA5DC1656BA8C04266206F46CA1E56CB02C", 'a', 204800};
     TestShamean::testChecksum(test_data_fb1);
-    s_test_data test_data_fb2 = {"7FEEBBE67D6425DE4759CB0E200238DAE753946A", 'a', 204801};
+    s_test_data test_data_fb2 = {"21F85AF2A955A71202945BC0D27B39B19982A82E", 'a', 204801};
     TestShamean::testChecksum(test_data_fb2);
 
 
     // Boundary test second boundary
-    s_test_data test_data_sb0 = {"4164F110D6B5399E67DB9063054D388D504CCA4D", 'a', 409599};
+    s_test_data test_data_sb0 = {"BA7DEC711D8D867153A69CF5BC39E01B497C33D3", 'a', 409599};
     TestShamean::testChecksum(test_data_sb0);
-    s_test_data test_data_sb1 = {"18B3E22788571B66F97D0E12309E62D57201E2C7", 'a', 409600};
+    s_test_data test_data_sb1 = {"11BF3C0F361820E841A8439D409CFB8B7C9E99F9", 'a', 409600};
     TestShamean::testChecksum(test_data_sb1);
-    s_test_data test_data_sb2 = {"16DD903090ED8BE4E257E5F9BC0F54D88CC02ED8", 'a', 409601};
+    s_test_data test_data_sb2 = {"629B1459AFD6D9EA88AF369CB2821403F3806400", 'a', 409601};
     TestShamean::testChecksum(test_data_sb2);
 
 }
 
-void
-TestShamean::testChecksum(s_test_data &test_data)
+void TestShamean::testChecksum(s_test_data &test_data)
 {
     char in_data[test_data.length + 1];
     for (long i = 0; i < test_data.length; i++)
@@ -99,9 +97,13 @@ TestShamean::testChecksum(s_test_data &test_data)
     }
     in_data[test_data.length] = '\0';
 
+    // Create options object
+    s_options options;
+    options.include_timestamp = false;
+    strcpy(options.filename, "test_file");
+
     // Create test file
-    char test_filename[] = "test_file";
-    std::ofstream test_file(test_filename, std::ofstream::binary | std::ofstream::trunc);
+    std::ofstream test_file(options.filename, std::ofstream::binary | std::ofstream::trunc);
     test_file << in_data;
     test_file.close();
     sync();
@@ -111,20 +113,24 @@ TestShamean::testChecksum(s_test_data &test_data)
     char out_checksum[41];
     bool open_err = false;
 
-    checksum_file(test_filename, checksum, open_err);
+    checksum_file(&options, checksum, open_err);
     convert_to_hex(checksum, out_checksum);
-
+    std::cout << out_checksum << std::endl << test_data.expected_checksum << std::endl;
     CPPUNIT_ASSERT(strcmp(out_checksum, test_data.expected_checksum) == 0);
     CPPUNIT_ASSERT(open_err == false);
-    std::remove(test_filename);
+    std::remove(options.filename);
 }
 
-void
-TestShamean::testChecksumNonExistFile(void)
+void TestShamean::testChecksumNonExistFile(void)
 {
     unsigned char checksum[21];
     bool open_err = false;
-    checksum_file("file_does_not_exist", checksum, open_err);
+
+    s_options options;
+    options.include_timestamp = false;
+    strcpy(options.filename, "file_does_not_exist");
+
+    checksum_file(&options, checksum, open_err);
     CPPUNIT_ASSERT(open_err == true);
 }
 
