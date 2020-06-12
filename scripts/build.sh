@@ -4,5 +4,5 @@ set -e
 set -x
 
 # Build!
-g++ -g main.cpp shamean.cpp -o shamean -lcrypto -static
+g++ -Wall -Wextra -g main.cpp shamean.cpp -o shamean -lcrypto -static
 
