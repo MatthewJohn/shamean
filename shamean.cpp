@@ -84,7 +84,7 @@ bool get_timestamp(const s_options *options, SFileData *file_data)
     struct stat result;
     if (stat(options->filename, &result) == 0)
     {
-        file_data->last_modified = (long)result.st_mtime;
+        file_data->last_modified = result.st_mtime;
         return true;
     }
     else

@@ -7,6 +7,7 @@
 #include <string>
 #include <list>
 #include <unistd.h>
+#include <utime.h>
 
 
 #include <cppunit/TestCase.h>
@@ -32,7 +33,10 @@ struct s_test_data {
   char expected_checksum[41];
   char character;
   long length;
+  long timestamp = 0;
+  bool force_disable_timestamp = false;
 };
+
 
 //-----------------------------------------------------------------------------
 
@@ -40,6 +44,8 @@ class TestShamean : public CppUnit::TestFixture
 {
     CPPUNIT_TEST_SUITE(TestShamean);
     CPPUNIT_TEST(testChecksumFile);
+    CPPUNIT_TEST(testTimestampChecksum);
+    CPPUNIT_TEST(testNoneTimestampChecksum);
     CPPUNIT_TEST(testChecksumNonExistFile);
     CPPUNIT_TEST_SUITE_END();
 
@@ -49,7 +55,10 @@ public:
 
 protected:
     void testChecksumFile(void);
+    void testTimestampChecksum(void);
     void testChecksumNonExistFile(void);
+    void testNoneTimestampChecksum(void);
+    void setTimestamp(s_options* options, s_test_data* test_data);
 private:
     void testChecksum(s_test_data &test_data);
 };
@@ -88,6 +97,33 @@ void TestShamean::testChecksumFile(void)
 
 }
 
+void TestShamean::testTimestampChecksum(void)
+{
+    s_test_data test_data_ts1 = {"ABB17776D11EBB751F513462A324E7A5D116EC6E", 'a', 1, 1000};
+    TestShamean::testChecksum(test_data_ts1);
+
+    // Test same file with different timestamp
+    s_test_data test_data_ts2 = {"7A2FEA7E5428E2582D9D7E614E4FEE8EED003D14", 'a', 1, 5000};
+    TestShamean::testChecksum(test_data_ts2);
+    // Repeat test with same file and timestamp
+    s_test_data test_data_ts3 = {"7A2FEA7E5428E2582D9D7E614E4FEE8EED003D14", 'a', 1, 5000};
+    TestShamean::testChecksum(test_data_ts3);
+}
+
+void TestShamean::testNoneTimestampChecksum(void)
+{
+    // Test file with given timestamp, but do not enable timestamp
+    s_test_data test_data_ts1 = {"FC82ACBEB9A0191373318AB6495D7A1FAAC56310", 'a', 1, 1000};
+    test_data_ts1.force_disable_timestamp = true;
+    TestShamean::testChecksum(test_data_ts1);
+
+    // Test same file with different timestamp
+    s_test_data test_data_ts2 = {"FC82ACBEB9A0191373318AB6495D7A1FAAC56310", 'a', 1, 5000};
+    test_data_ts2.force_disable_timestamp = true;
+    TestShamean::testChecksum(test_data_ts2);
+
+}
+
 void TestShamean::testChecksum(s_test_data &test_data)
 {
     char in_data[test_data.length + 1];
@@ -108,6 +144,12 @@ void TestShamean::testChecksum(s_test_data &test_data)
     test_file.close();
     sync();
 
+    // If timestamp has been specified, setup test for this
+    if (test_data.timestamp > 0)
+    {
+        TestShamean::setTimestamp(&options, &test_data);
+    }
+
     // Create variables to pass to checksum_file
     unsigned char checksum[21];
     char out_checksum[41];
@@ -118,6 +160,21 @@ void TestShamean::testChecksum(s_test_data &test_data)
     CPPUNIT_ASSERT(strcmp(out_checksum, test_data.expected_checksum) == 0);
     CPPUNIT_ASSERT(open_err == false);
     std::remove(options.filename);
+}
+
+void TestShamean::setTimestamp(s_options* options, s_test_data* test_data)
+{
+    struct stat stats;
+    struct utimbuf new_times;
+    stat(options->filename, &stats);
+
+    new_times.actime = stats.st_atime;
+    new_times.modtime = test_data->timestamp;
+
+    utime(options->filename, &new_times);
+
+    // Set timestamp to be used for checksum
+    options->include_timestamp = ! test_data->force_disable_timestamp;
 }
 
 void TestShamean::testChecksumNonExistFile(void)
