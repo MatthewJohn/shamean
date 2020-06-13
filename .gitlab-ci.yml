@@ -15,7 +15,6 @@ before_script:
 
 build:
   stage: build
-    - env
 
   script:
     - echo "#define SHAMEAN_VERSION \"gitlab-${CI_COMMIT_BRANCH}\"" > version.hpp
