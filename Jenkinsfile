@@ -1,6 +1,6 @@
 node {
     stage('Checkout') {
-        git branch: "${env.GIT_BRANCH}", url: 'ssh://vcs-user@phabricator.dockstudios.co.uk/diffusion/SHAMEAN/shamean.git'
+        git branch: env.GIT_BRANCH, url: 'ssh://vcs-user@phabricator.dockstudios.co.uk/diffusion/SHAMEAN/shamean.git'
     }
     stage('PullImage') {
         sh './scripts/build_container.sh --build-arg=http_proxy=http://fare-proxy.dock.studios:3142 --build-arg=https_proxy=http://fare-proxy.dock.studios:3142'
