@@ -1,0 +1,33 @@
+# use the official gcc image, based on debian
+# can use verions as well, like gcc:5.2
+# see https://hub.docker.com/_/gcc/
+image: ubuntu:18.04
+
+before_script:
+  - apt-get update
+  - apt-get install -y gcc clang cmake libgtest-dev libgoogle-glog-dev
+    libboost-all-dev g++ automake autoconf autoconf-archive libtool
+    libevent-dev libdouble-conversion-dev libgoogle-glog-dev libgflags-dev
+    liblz4-dev liblzma-dev libsnappy-dev make zlib1g-dev binutils-dev
+    libjemalloc-dev libssl-dev libiberty-dev libcrypto++-dev
+    libcppunit-dev gcovr
+
+
+build:
+  stage: build
+
+  script:
+    - echo "#define SHAMEAN_VERSION \"gitlab-${CI_COMMIT_BRANCH}\"" > version.hpp
+    - echo "#define SHAMEAN_BUILD_DATE \"`date`\"" >> version.hpp
+    - echo "#define SHAMEAN_GIT_COMMIT \"`git rev-parse HEAD`\"" >> version.hpp
+    - ./scripts/build.sh
+
+  artifacts:
+    paths:
+      - shamean
+
+test:
+  stage: test
+  script:
+    - ./scripts/run_tests.sh
+
