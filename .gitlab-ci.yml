@@ -8,35 +8,13 @@ build:
   # instead of calling g++ directly you can also use some build toolkit like make
   # install the necessary build tools when needed
   before_script:
-    - apt-get update && apt-get install -y \
-      gcc \
-      clang \
-      cmake \
-      libgtest-dev \
-      libgoogle-glog-dev \
-      libboost-all-dev \
-      g++ \
-      automake \
-      autoconf \
-      autoconf-archive \
-      libtool \
-      libboost-all-dev \
-      libevent-dev \
-      libdouble-conversion-dev \
-      libgoogle-glog-dev \
-      libgflags-dev \
-      liblz4-dev \
-      liblzma-dev \
-      libsnappy-dev \
-      make \
-      zlib1g-dev \
-      binutils-dev \
-      libjemalloc-dev \
-      libssl-dev \
-      libiberty-dev \
-      libcrypto++-dev \
-      libcppunit-dev \
-      gcovr
+    - apt-get update
+    - apt-get install -y gcc clang cmake libgtest-dev libgoogle-glog-dev
+      libboost-all-dev g++ automake autoconf autoconf-archive libtool
+      libevent-dev libdouble-conversion-dev libgoogle-glog-dev libgflags-dev
+      liblz4-dev liblzma-dev libsnappy-dev make zlib1g-dev binutils-dev
+      libjemalloc-dev libssl-dev libiberty-dev libcrypto++-dev
+      libcppunit-dev gcovr
 
   script:
     - echo "#define SHAMEAN_VERSION \"${env.BUILD_NUMBER}\"" > version.hpp
