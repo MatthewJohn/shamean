@@ -10,13 +10,13 @@ void checksum_file(const s_options *options, unsigned char *checksum, bool &file
     // Create struct to hold file info
     SFileData file_data;
 
-    // Leave room for start of file data, end of file data and file size.
-    // @TODO Should it include timestamp?
-    int buffer_size = sizeof(file_data.all_data);
-
     // Initialise array
-    for (int i = 0; i < buffer_size; i++)
-       file_data.all_data[i] = 0x00;
+    file_data.filesize = 0;
+    file_data.last_modified = 0;
+    for (int i = 0; i < BYTE_LENGTH; i++)
+       file_data.first[i] = 0x00;
+    for (int i = 0; i < BYTE_LENGTH; i++)
+       file_data.last[i] = 0x00;
 
     if (options->include_timestamp)
     {

@@ -20,19 +20,15 @@
 #define CHECKSUM_LENGTH_HEX 40
 #define PATH_MAX 4096
 
-typedef union {
-    struct {
+typedef struct {
+    long filesize; ///< Size of file in bytes
 
-        long filesize; ///< Size of file in bytes
+    long last_modified; ///< Last modified date
 
-        long last_modified; ///< Last modified date
+    char first[BYTE_LENGTH]; ///< Data from start of file
 
-        char first[BYTE_LENGTH]; ///< Data from start of file
+    char last[BYTE_LENGTH]; ///< Data from end of file
 
-        char last[BYTE_LENGTH]; ///< Data from end of file
-    };
-
-    unsigned char all_data[(sizeof(long) * 2) + (BYTE_LENGTH * 2)]; ///< Union of all data for checksum
 } SFileData;
 
 /**
