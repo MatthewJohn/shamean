@@ -68,57 +68,57 @@ private:
 void TestShamean::testChecksumFile(void)
 {
     // Test zero size file and boundary test
-    s_test_data test_data_z1 = {"3C97D0B9804A1AA8E22EAEDD8C31B1D06D7A30DF", 'a', 0};
+    s_test_data test_data_z1 = {"7156ECD78C70FC3349EBB604C9B934018EB1CBB2", 'a', 0};
     TestShamean::testChecksum(test_data_z1);
-    s_test_data test_data_z2 = {"FC82ACBEB9A0191373318AB6495D7A1FAAC56310", 'a', 1};
+    s_test_data test_data_z2 = {"4FB276174E7C6357851669D70C66975ED4F32E30", 'a', 1};
     TestShamean::testChecksum(test_data_z2);
  
 
     // Test small file
-    s_test_data test_data_sf1 = {"A50C171BDD4603CCCBA7B56C093C1A3F023944B3", 'a', 8};
+    s_test_data test_data_sf1 = {"D35CD2A09CB225209679C56B42C60D9440A3B8BB", 'a', 8};
     TestShamean::testChecksum(test_data_sf1);
 
     // Boundary test first boundary 
-    s_test_data test_data_fb0 = {"EE086E808FC9DB1A0409B5AAEDC0536A68551BDE", 'a', 204799};
+    s_test_data test_data_fb0 = {"79CBA16DF55089FB8B132A7D407DD85A9EC20835", 'a', 204799};
     TestShamean::testChecksum(test_data_fb0);
-    s_test_data test_data_fb1 = {"0A691FA5DC1656BA8C04266206F46CA1E56CB02C", 'a', 204800};
+    s_test_data test_data_fb1 = {"BB7F02D1FB88F7DA7A3967370DECB72539C5A220", 'a', 204800};
     TestShamean::testChecksum(test_data_fb1);
-    s_test_data test_data_fb2 = {"21F85AF2A955A71202945BC0D27B39B19982A82E", 'a', 204801};
+    s_test_data test_data_fb2 = {"7FEEBBE67D6425DE4759CB0E200238DAE753946A", 'a', 204801};
     TestShamean::testChecksum(test_data_fb2);
 
 
     // Boundary test second boundary
-    s_test_data test_data_sb0 = {"BA7DEC711D8D867153A69CF5BC39E01B497C33D3", 'a', 409599};
+    s_test_data test_data_sb0 = {"4164F110D6B5399E67DB9063054D388D504CCA4D", 'a', 409599};
     TestShamean::testChecksum(test_data_sb0);
-    s_test_data test_data_sb1 = {"11BF3C0F361820E841A8439D409CFB8B7C9E99F9", 'a', 409600};
+    s_test_data test_data_sb1 = {"18B3E22788571B66F97D0E12309E62D57201E2C7", 'a', 409600};
     TestShamean::testChecksum(test_data_sb1);
-    s_test_data test_data_sb2 = {"629B1459AFD6D9EA88AF369CB2821403F3806400", 'a', 409601};
+    s_test_data test_data_sb2 = {"16DD903090ED8BE4E257E5F9BC0F54D88CC02ED8", 'a', 409601};
     TestShamean::testChecksum(test_data_sb2);
 
 }
 
 void TestShamean::testTimestampChecksum(void)
 {
-    s_test_data test_data_ts1 = {"ABB17776D11EBB751F513462A324E7A5D116EC6E", 'a', 1, 1000};
+    s_test_data test_data_ts1 = {"EB5FB18E5BFA97F58403FB424F843A8BD25F61EA", 'a', 1, 1000};
     TestShamean::testChecksum(test_data_ts1);
 
     // Test same file with different timestamp
-    s_test_data test_data_ts2 = {"7A2FEA7E5428E2582D9D7E614E4FEE8EED003D14", 'a', 1, 5000};
+    s_test_data test_data_ts2 = {"8C1E723343EA0A5846F692F6024EAA5FE29939B1", 'a', 1, 5000};
     TestShamean::testChecksum(test_data_ts2);
     // Repeat test with same file and timestamp
-    s_test_data test_data_ts3 = {"7A2FEA7E5428E2582D9D7E614E4FEE8EED003D14", 'a', 1, 5000};
+    s_test_data test_data_ts3 = {"8C1E723343EA0A5846F692F6024EAA5FE29939B1", 'a', 1, 5000};
     TestShamean::testChecksum(test_data_ts3);
 }
 
 void TestShamean::testNoneTimestampChecksum(void)
 {
     // Test file with given timestamp, but do not enable timestamp
-    s_test_data test_data_ts1 = {"FC82ACBEB9A0191373318AB6495D7A1FAAC56310", 'a', 1, 1000};
+    s_test_data test_data_ts1 = {"4FB276174E7C6357851669D70C66975ED4F32E30", 'a', 1, 1000};
     test_data_ts1.force_disable_timestamp = true;
     TestShamean::testChecksum(test_data_ts1);
 
     // Test same file with different timestamp
-    s_test_data test_data_ts2 = {"FC82ACBEB9A0191373318AB6495D7A1FAAC56310", 'a', 1, 5000};
+    s_test_data test_data_ts2 = {"4FB276174E7C6357851669D70C66975ED4F32E30", 'a', 1, 5000};
     test_data_ts2.force_disable_timestamp = true;
     TestShamean::testChecksum(test_data_ts2);
 

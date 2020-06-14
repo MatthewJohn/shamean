@@ -72,7 +72,14 @@ void checksum_file(const s_options *options, unsigned char *checksum, bool &file
     SHA1_Init(&ctx);
 
     // Update SHA with all data from file_data struct
-    SHA1_Update(&ctx, file_data.all_data, buffer_size);
+    SHA1_Update(&ctx, &file_data.filesize, sizeof(long));
+    SHA1_Update(&ctx, &file_data.first, BYTE_LENGTH);
+    SHA1_Update(&ctx, &file_data.last, BYTE_LENGTH);
+
+    if (options->include_timestamp)
+    {
+        SHA1_Update(&ctx, &file_data.last_modified, sizeof(long));
+    }
 
     // Finalise checksum into checksum byte array
     SHA1_Final(checksum, &ctx);
