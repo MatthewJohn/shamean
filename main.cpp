@@ -9,9 +9,12 @@
 
 #include "shamean.hpp"
 
-int main( int argc, const char* argv[] )
+
+int main( int argc, char* argv[] )
 {
-    if (argc != 2 or strcmp(argv[1], "--help") == 0) {
+    s_options options;
+    if (get_options(argc, argv, &options) || options.show_usage)
+    {
         get_usage();
         return 1;
     }
@@ -24,7 +27,7 @@ int main( int argc, const char* argv[] )
     bool file_err = false;
 
     // Perform checksum
-    checksum_file(argv[1], checksum_bin, file_err);
+    checksum_file(&options, checksum_bin, file_err);
 
     // Check if error occurred
     if (file_err)

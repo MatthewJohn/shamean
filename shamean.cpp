@@ -5,21 +5,29 @@
 
 #include "shamean.hpp"
 
-void checksum_file(const char *filename, unsigned char *checksum, bool &file_err)
+void checksum_file(const s_options *options, unsigned char *checksum, bool &file_err)
 {
     // Create struct to hold file info
     SFileData file_data;
 
-    // Leave room for start of file data, end of file data and file size.
-    // @TODO Should it include timestamp?
-    int buffer_size = sizeof(long) + (BYTE_LENGTH * 2);
-
     // Initialise array
-    for (int i = 0; i < buffer_size; i++)
-       file_data.all_data[i] = 0x00;
+    file_data.filesize = 0;
+    file_data.last_modified = 0;
+    for (int i = 0; i < BYTE_LENGTH; i++)
+       file_data.first[i] = 0x00;
+    for (int i = 0; i < BYTE_LENGTH; i++)
+       file_data.last[i] = 0x00;
+
+    if (options->include_timestamp)
+    {
+        if (!get_timestamp(options, &file_data))
+        {
+            std::cout << "Error whilst getting file stat()" << std::endl;
+        }
+    }
 
     // Open file to read data
-    std::ifstream in_file(filename, std::ifstream::ate | std::ifstream::binary);
+    std::ifstream in_file(options->filename, std::ifstream::ate | std::ifstream::binary);
 
     if (! in_file.is_open())
     {
@@ -64,11 +72,32 @@ void checksum_file(const char *filename, unsigned char *checksum, bool &file_err
     SHA1_Init(&ctx);
 
     // Update SHA with all data from file_data struct
-    SHA1_Update(&ctx, file_data.all_data, buffer_size);
+    SHA1_Update(&ctx, &file_data.filesize, sizeof(long));
+    SHA1_Update(&ctx, &file_data.first, BYTE_LENGTH);
+    SHA1_Update(&ctx, &file_data.last, BYTE_LENGTH);
+
+    if (options->include_timestamp)
+    {
+        SHA1_Update(&ctx, &file_data.last_modified, sizeof(long));
+    }
 
     // Finalise checksum into checksum byte array
     SHA1_Final(checksum, &ctx);
     return;
+}
+
+bool get_timestamp(const s_options *options, SFileData *file_data)
+{
+    struct stat result;
+    if (stat(options->filename, &result) == 0)
+    {
+        file_data->last_modified = result.st_mtime;
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 void convert_to_hex(unsigned char *checksum_bin, char *checksum_hex)
@@ -83,7 +112,7 @@ void convert_to_hex(unsigned char *checksum_bin, char *checksum_hex)
 
 void get_usage()
 {
-    std::cout << "Usage: shamain <Filename>" << std::endl
+    std::cout << "Usage: shamain [-t] [-h] <Filename>" << std::endl
               << std::endl
               << "Generate a SHA-1 SUM, based on length and subset of data from a file."
               << std::endl
@@ -93,3 +122,35 @@ void get_usage()
 }
 
 
+bool get_options(int argc, char* argv[], s_options* options)
+{
+    int option;
+
+    while ((option = getopt(argc, argv, "th")) != -1) {
+        switch(option) {
+            case 'h':
+                options->show_usage = true;
+                break;
+            case 't':
+                options->include_timestamp = true;
+                break;
+            case '?': //used for some unknown options
+                printf("unknown option: %c\n", optopt);
+                return true;
+        }
+    }
+
+    // Return error if there is not one remaining argument (file path)
+    if (argc - optind != 1)
+    {
+        return true;
+    }
+
+    // Move filename into filename option
+    for(; optind < argc; optind++) {
+        strcpy(options->filename, argv[optind]);
+    }
+
+    // Return everything's okay
+    return false;
+}
