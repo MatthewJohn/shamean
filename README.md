@@ -30,9 +30,9 @@ Since most files store metadata at the start of the file, which differs between 
 
 ### What it is NOT
 
-Do not use shamean to determine if files are identicle. Period.
+Do not use shamean to determine if files are identical. Period.
 
-Identicle checksums do not mean identical file content.
+Identical checksums do not mean identical file content.
 
 Therefore, I strongly recommend not using this as a file comparison for duplicate-purging purposes or other like-tasks.
 
