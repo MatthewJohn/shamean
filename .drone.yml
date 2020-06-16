@@ -1,0 +1,21 @@
+---
+kind: pipeline
+name: build-linux-64
+
+platform:
+  arch: amd64
+
+steps:
+- name: test
+  image: ubuntu:18.04
+    - apt-get update
+    - apt-get install -y gcc clang cmake libgtest-dev libgoogle-glog-dev
+      libboost-all-dev g++ automake autoconf autoconf-archive libtool
+      libevent-dev libdouble-conversion-dev libgoogle-glog-dev libgflags-dev
+      liblz4-dev liblzma-dev libsnappy-dev make zlib1g-dev binutils-dev
+      libjemalloc-dev libssl-dev libiberty-dev libcrypto++-dev
+      libcppunit-dev gcovr
+    - echo "#define SHAMEAN_VERSION \"gitlab-${CI_COMMIT_BRANCH}\"" > version.hpp
+    - echo "#define SHAMEAN_BUILD_DATE \"`date`\"" >> version.hpp
+    - echo "#define SHAMEAN_GIT_COMMIT \"`git rev-parse HEAD`\"" >> version.hpp
+    - ./scripts/build.sh
