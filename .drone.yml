@@ -19,3 +19,4 @@ steps:
     - echo "#define SHAMEAN_BUILD_DATE \"`date`\"" >> version.hpp
     - echo "#define SHAMEAN_GIT_COMMIT \"`git rev-parse HEAD`\"" >> version.hpp
     - ./scripts/build.sh
+    - ./scripts/run_tests.sh
