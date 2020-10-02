@@ -15,9 +15,9 @@
 #include "version.hpp"
 
 // 256KiB max data to checksum
-#define MAX_BYTE_LENGTH 2 << 18
+#define MAX_BYTE_LENGTH 2 << 21
 // 256KiB default size to checksum
-#define DEFAULT_BYTE_LENGTH 2 << 21
+#define DEFAULT_BYTE_LENGTH 2 << 18
 #define CHECKSUM_LENGTH 20
 #define CHECKSUM_LENGTH_HEX 40
 #define PATH_MAX 4096
