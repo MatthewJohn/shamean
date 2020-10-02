@@ -14,8 +14,10 @@
 
 #include "version.hpp"
 
-// 200KB default size to checksum
-#define BYTE_LENGTH 204800
+// 2MiB max data to checksum
+#define MAX_BYTE_LENGTH 2097152
+// 256KB default size to checksum
+#define DEFAULT_BYTE_LENGTH 204800
 #define CHECKSUM_LENGTH 20
 #define CHECKSUM_LENGTH_HEX 40
 #define PATH_MAX 4096
@@ -25,9 +27,9 @@ typedef struct {
 
     long last_modified; ///< Last modified date
 
-    char first[BYTE_LENGTH]; ///< Data from start of file
+    char first[MAX_BYTE_LENGTH]; ///< Data from start of file
 
-    char last[BYTE_LENGTH]; ///< Data from end of file
+    char last[MAX_BYTE_LENGTH]; ///< Data from end of file
 
 } SFileData;
 
@@ -39,6 +41,8 @@ typedef struct {
     bool include_timestamp = false; ///< Whether to use timestamps in hash
 
     bool show_usage = false; ///< Whether to show usage and quit
+
+    int byte_length = DEFAULT_BYTE_LENGTH; ///< Amount of bytes to use from start/end of file
 
     char filename[PATH_MAX]; ///< Filename/path
 
