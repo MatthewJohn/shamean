@@ -126,7 +126,7 @@ bool get_options(int argc, char* argv[], s_options* options)
 {
     int option;
 
-    while ((option = getopt(argc, argv, "thb")) != -1) {
+    while ((option = getopt(argc, argv, "thb:")) != -1) {
         switch(option) {
             case 'h':
                 options->show_usage = true;
