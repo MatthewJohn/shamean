@@ -1,7 +1,7 @@
 shamean
 cppTestShameanResults.xml
 shamean.o
-testshamean
+test_shamean
 coverage.xml
 *.gcda
 *.gcno
