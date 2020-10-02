@@ -42,7 +42,7 @@ typedef struct {
 
     bool show_usage = false; ///< Whether to show usage and quit
 
-    unsigned int byte_length = DEFAULT_BYTE_LENGTH; ///< Amount of bytes to use from start/end of tile
+    int byte_length = DEFAULT_BYTE_LENGTH; ///< Amount of bytes to use from start/end of tile
 
     char filename[PATH_MAX]; ///< Filename/path
 

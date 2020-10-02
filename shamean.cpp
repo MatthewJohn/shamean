@@ -13,9 +13,9 @@ void checksum_file(const s_options *options, unsigned char *checksum, bool &file
     // Initialise array
     file_data.filesize = 0;
     file_data.last_modified = 0;
-    for (unsigned int i = 0; i < options->byte_length; i++)
+    for (int i = 0; i < MAX_BYTE_LENGTH; i++)
        file_data.first[i] = 0x00;
-    for (unsigned int i = 0; i < options->byte_length; i++)
+    for (int i = 0; i < MAX_BYTE_LENGTH; i++)
        file_data.last[i] = 0x00;
 
     if (options->include_timestamp)
