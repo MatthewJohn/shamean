@@ -156,7 +156,7 @@ bool get_options(int argc, char* argv[], s_options* options)
 
     if (options->byte_length > MAX_BYTE_LENGTH)
     {
-        std::cout << "Byte length must be a maximum of " << MAX_BYTE_LENGTH << std::endl;
+        std::cout << "Byte length must be a maximum of " << std::hex << MAX_BYTE_LENGTH << std::endl;
         return true;
     }
 
