@@ -152,6 +152,7 @@ bool get_options(int argc, char* argv[], s_options* options)
     if (options->byte_length < 1)
     {
         std::cout << "Byte length must a positive integer" << std::endl;
+	return true;
     }
 
     if (options->byte_length > MAX_BYTE_LENGTH)
