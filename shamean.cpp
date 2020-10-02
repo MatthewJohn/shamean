@@ -103,7 +103,7 @@ bool get_timestamp(const s_options *options, SFileData *file_data)
 void convert_to_hex(unsigned char *checksum_bin, char *checksum_hex)
 {
     // Convert binary checksum into hex
-    for(unsigned int j = 0; j < CHECKSUM_LENGTH; j++)
+    for(int j = 0; j < CHECKSUM_LENGTH; j++)
     {
         // Print each character
         sprintf(&checksum_hex[j * 2], "%02X", checksum_bin[j]);
