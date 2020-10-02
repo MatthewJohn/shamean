@@ -13,9 +13,9 @@ void checksum_file(const s_options *options, unsigned char *checksum, bool &file
     // Initialise array
     file_data.filesize = 0;
     file_data.last_modified = 0;
-    for (int i = 0; i < BYTE_LENGTH; i++)
+    for (unsigned int i = 0; i < options->byte_length; i++)
        file_data.first[i] = 0x00;
-    for (int i = 0; i < BYTE_LENGTH; i++)
+    for (unsigned int i = 0; i < options->byte_length; i++)
        file_data.last[i] = 0x00;
 
     if (options->include_timestamp)
@@ -45,7 +45,7 @@ void checksum_file(const s_options *options, unsigned char *checksum, bool &file
 
     // Determine if file is big enough to read entire BYTE_LENGTH amount,
     // else read all available data
-    int first_read_l = (file_data.filesize < BYTE_LENGTH) ? file_data.filesize : BYTE_LENGTH;
+    int first_read_l = (file_data.filesize < options->byte_length) ? file_data.filesize : options->byte_length;
 
     // If there is data in file to read, do it.
     if (first_read_l > 0)
@@ -56,7 +56,7 @@ void checksum_file(const s_options *options, unsigned char *checksum, bool &file
     // Determine amount of data to read from end of file.
     // If remainig data after read from first half, use either whole BYTE_LENGTH
     // or remaining data length.
-    int end_read_l = ((file_data.filesize - first_read_l) < BYTE_LENGTH) ? (file_data.filesize - first_read_l) : BYTE_LENGTH;
+    int end_read_l = ((file_data.filesize - first_read_l) < options->byte_length) ? (file_data.filesize - first_read_l) : options->byte_length;
 
     if (end_read_l > 0)
     {
@@ -73,8 +73,8 @@ void checksum_file(const s_options *options, unsigned char *checksum, bool &file
 
     // Update SHA with all data from file_data struct
     SHA1_Update(&ctx, &file_data.filesize, sizeof(long));
-    SHA1_Update(&ctx, &file_data.first, BYTE_LENGTH);
-    SHA1_Update(&ctx, &file_data.last, BYTE_LENGTH);
+    SHA1_Update(&ctx, &file_data.first, options->byte_length);
+    SHA1_Update(&ctx, &file_data.last, options->byte_length);
 
     if (options->include_timestamp)
     {
@@ -103,7 +103,7 @@ bool get_timestamp(const s_options *options, SFileData *file_data)
 void convert_to_hex(unsigned char *checksum_bin, char *checksum_hex)
 {
     // Convert binary checksum into hex
-    for(int j = 0; j < CHECKSUM_LENGTH; j++)
+    for(unsigned int j = 0; j < CHECKSUM_LENGTH; j++)
     {
         // Print each character
         sprintf(&checksum_hex[j * 2], "%02X", checksum_bin[j]);
@@ -126,7 +126,7 @@ bool get_options(int argc, char* argv[], s_options* options)
 {
     int option;
 
-    while ((option = getopt(argc, argv, "th")) != -1) {
+    while ((option = getopt(argc, argv, "thb")) != -1) {
         switch(option) {
             case 'h':
                 options->show_usage = true;
@@ -134,6 +134,9 @@ bool get_options(int argc, char* argv[], s_options* options)
             case 't':
                 options->include_timestamp = true;
                 break;
+            case 'b':
+		options->byte_length = atoi(optarg);
+		break;
             case '?': //used for some unknown options
                 printf("unknown option: %c\n", optopt);
                 return true;
@@ -143,6 +146,17 @@ bool get_options(int argc, char* argv[], s_options* options)
     // Return error if there is not one remaining argument (file path)
     if (argc - optind != 1)
     {
+        return true;
+    }
+
+    if (options->byte_length < 1)
+    {
+        std::cout << "Byte length must a positive integer" << std::endl;
+    }
+
+    if (options->byte_length > MAX_BYTE_LENGTH)
+    {
+        std::cout << "Byte length must be a maximum of " << MAX_BYTE_LENGTH << std::endl;
         return true;
     }
 
