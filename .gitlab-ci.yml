@@ -20,7 +20,7 @@ build:
     - echo "#define SHAMEAN_VERSION \"gitlab-${CI_COMMIT_BRANCH}\"" > version.hpp
     - echo "#define SHAMEAN_BUILD_DATE \"`date`\"" >> version.hpp
     - echo "#define SHAMEAN_GIT_COMMIT \"`git rev-parse HEAD`\"" >> version.hpp
-    - ./scripts/build.sh
+    - make
 
   artifacts:
     paths:
@@ -29,5 +29,5 @@ build:
 test:
   stage: test
   script:
-    - ./scripts/run_tests.sh
+    - make test
 
