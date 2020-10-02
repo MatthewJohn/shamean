@@ -1,6 +1,13 @@
 
+CC = g++
+
+CFLAGS = -Wall -Wextra
+
+TARGET = shamean
+SOURCES = main.cpp shamean.cpp
+
 all: main.cpp
-	g++ -Wall -Wextra -g main.cpp shamean.cpp -o shamean -lcrypto -static
+	g++ $(CFLAGS) -g $(SOURCES) -o $(TARGET) -lcrypto -static
 
 test: test_shamean.cpp
 	g++ -fprofile-arcs -ftest-coverage -fPIC -O0 -g -I./ -c shamean.cpp -o shamean.o  -static
