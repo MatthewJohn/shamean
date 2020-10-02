@@ -14,9 +14,9 @@
 
 #include "version.hpp"
 
-// 256KiB max data to checksum
+// 2MiB max data to checksum
 #define MAX_BYTE_LENGTH 2 << 21
-// 256KiB default size to checksum
+// 256KB default size to checksum
 #define DEFAULT_BYTE_LENGTH 204800
 #define CHECKSUM_LENGTH 20
 #define CHECKSUM_LENGTH_HEX 40
@@ -42,7 +42,7 @@ typedef struct {
 
     bool show_usage = false; ///< Whether to show usage and quit
 
-    int byte_length = DEFAULT_BYTE_LENGTH; ///< Amount of bytes to use from start/end of tile
+    int byte_length = DEFAULT_BYTE_LENGTH; ///< Amount of bytes to use from start/end of file
 
     char filename[PATH_MAX]; ///< Filename/path
 
