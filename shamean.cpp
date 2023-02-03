@@ -10,6 +10,13 @@ void checksum_file(const s_options *options, unsigned char *checksum, bool &file
     // Create struct to hold file info
     SFileData file_data;
 
+    //file_data.first = (char*)malloc(sizeof(char) * BYTE_LENGTH);
+    //file_data.last = (char*)malloc(sizeof(char) * BYTE_LENGTH);
+    char first[BYTE_LENGTH];
+    char last[BYTE_LENGTH];
+    file_data.first = &first;
+    file_data.last = last;
+
     // Initialise array
     file_data.filesize = 0;
     file_data.last_modified = 0;
@@ -73,8 +80,8 @@ void checksum_file(const s_options *options, unsigned char *checksum, bool &file
 
     // Update SHA with all data from file_data struct
     SHA1_Update(&ctx, &file_data.filesize, sizeof(long));
-    SHA1_Update(&ctx, &file_data.first, BYTE_LENGTH);
-    SHA1_Update(&ctx, &file_data.last, BYTE_LENGTH);
+    SHA1_Update(&ctx, file_data.first, BYTE_LENGTH);
+    SHA1_Update(&ctx, file_data.last, BYTE_LENGTH);
 
     if (options->include_timestamp)
     {
@@ -83,6 +90,10 @@ void checksum_file(const s_options *options, unsigned char *checksum, bool &file
 
     // Finalise checksum into checksum byte array
     SHA1_Final(checksum, &ctx);
+
+    free(file_data.first);
+    free(file_data.last);
+
     return;
 }
 
