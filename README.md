@@ -36,6 +36,41 @@ Identical checksums do not mean identical file content.
 
 Therefore, I strongly recommend not using this as a file comparison for duplicate-purging purposes or other like-tasks.
 
+## Examples
+
+```
+## Files with the same content
+$ echo "Identical file" > ./file_a
+$ echo "Identical file" > ./file_b
+
+$ ./shamean ./file_a
+55DC8CF43FBE191C52A244A67C881167DFD998E5
+$ ./shamean ./file_b
+55DC8CF43FBE191C52A244A67C881167DFD998E5
+
+## Files with the different content
+$ echo "Identical file" > ./file_a
+$ echo "Different file" > ./file_b
+
+$ ./shamean ./file_a
+55DC8CF43FBE191C52A244A67C881167DFD998E5
+$ ./shamean ./file_b
+3149A0A2FEA93E88DB30D39383FAFA1D267E3777
+
+## Checking file modification timestamps
+$ echo "File Content" > ./file_a
+$ cp -a ./file_a ./file_b
+
+$ ./shamean -t ./file_a
+BD16D99AC58588C3B48D7558D7BC60E9FDE74071
+$ ./shamean -t ./file_b
+BD16D99AC58588C3B48D7558D7BC60E9FDE74071
+
+$ touch ./file_b
+$ ./shamean -t ./file_b
+79EA66DE835D2BBF8599F127B2933690D5EFA2D5
+```
+
 
 ## Uses in pop-culture
 
